@@ -19,7 +19,12 @@ const clientesSchema = mongoose.Schema({
         required: true,
         unique:true
     },
-    Fecha: {
+    FechaIngreso: {
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
+    FechaPago: {
         type: Date,
         required: true,
         default: Date.now()
@@ -45,8 +50,8 @@ const clientesSchema = mongoose.Schema({
         ref: 'Prestamista',
     },
     ubicacion: {
-        lat: { type: Number, required: true },
-        lng: { type: Number, required: true },
+        lat: { type: Number, required: false },
+        lng: { type: Number, required: false },
       },
       nombreUbicacion: String,
 }, {

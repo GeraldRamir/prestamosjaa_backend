@@ -7,9 +7,9 @@ const agregarCliente = async (req, res) => {
         if (!req.prestamista) {
             return res.status(400).json({ msg: 'Prestamista no encontrado' });
         }
-        const { ValorPrestamo, NumeroCuenta, Banco, ClaveTarjeta, Empresa, ubicacion, Interes, FechaIngreso,FechaPago } = req.body;
+        const { ValorPrestamo, NumeroCuenta, Banco, ClaveTarjeta, Empresa, ubicacion, Interes,apellido } = req.body;
 
-        const camposRequeridos = [ValorPrestamo, NumeroCuenta, Banco, ClaveTarjeta, Empresa, Interes, FechaIngreso, FechaPago];
+        const camposRequeridos = [ValorPrestamo, NumeroCuenta, Banco, ClaveTarjeta, Empresa, Interes,apellido];
         if (camposRequeridos.some(campo => campo === undefined || campo === null || campo === '')) {
           return res.status(400).json({ msg: 'Todos los campos son obligatorios' });
         }
@@ -27,8 +27,9 @@ const agregarCliente = async (req, res) => {
             copiaCedula: req.body.copiaCedula,
             Empresa: req.body.Empresa,
             ClaveTarjeta: req.body.ClaveTarjeta,
-            FechaIngreso: req.body.FechaIngreso, // asegúrate de que el frontend envíe esto
-            FechaPago: req.body.FechaPago,       // idem
+            // FechaIngreso: req.body.FechaIngreso, // asegúrate de que el frontend envíe esto
+            // FechaPago: req.body.FechaPago,       // idem
+            apellido: req.body.apellido,
             Banco: req.body.Banco,
             NumeroCuenta: req.body.NumeroCuenta,
             ValorPrestamo: req.body.ValorPrestamo,
@@ -36,6 +37,7 @@ const agregarCliente = async (req, res) => {
             Prestamista: req.prestamista._id,
             ubicacion: req.body.ubicacion,
             nombreUbicacion: req.body.nombreUbicacion,
+
         });
         
         cliente.Prestamista = req.prestamista._id;
@@ -95,8 +97,9 @@ const actualizarCliente = async (req, res) => {
     cliente.copiaCedula = req.body.copiaCedula || cliente.copiaCedula;
     cliente.Empresa = req.body.Empresa || cliente.Empresa;
     cliente.ClaveTarjeta = req.body.ClaveTarjeta || cliente.ClaveTarjeta;
-    cliente.FechaIngreso = req.body.FechaIngreso || cliente.FechaIngreso;
-    cliente.FechaPago = req.body.FechaPago || cliente.FechaPago;
+    // cliente.FechaIngreso = req.body.FechaIngreso || cliente.FechaIngreso;
+    // cliente.FechaPago = req.body.FechaPago || cliente.FechaPago;
+    cliente.apellido = req.body.apellido || cliente.apellido;
     cliente.Banco = req.body.Banco || cliente.Banco;
     cliente.NumeroCuenta = req.body.NumeroCuenta || cliente.NumeroCuenta;
     cliente.ValorPrestamo = req.body.ValorPrestamo || cliente.ValorPrestamo;

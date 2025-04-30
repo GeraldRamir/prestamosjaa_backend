@@ -9,7 +9,8 @@ const agregarCliente = async (req, res) => {
         }
         const { ValorPrestamo, NumeroCuenta, Banco, ClaveTarjeta, Empresa, ubicacion, Interes, FechaIngreso,FechaPago, telefono } = req.body;
 
-        if (!ValorPrestamo || !NumeroCuenta || !Banco || !ClaveTarjeta || !Empresa || !Interes || !FechaIngreso || !FechaPago, !telefono) {
+        if (!ValorPrestamo || !NumeroCuenta || !Banco || !ClaveTarjeta || !Empresa || !Interes || !FechaIngreso || !FechaPago || !telefono) {
+
             return res.status(400).json({ msg: 'Todos los campos son obligatorios' });
         }
         

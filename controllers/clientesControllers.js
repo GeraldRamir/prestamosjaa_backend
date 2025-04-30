@@ -4,6 +4,7 @@ import Pago from "../models/Pago.js"; // 🔹 Importar el modelo de pagos
 
 const agregarCliente = async (req, res) => {
     try {
+        console.log("📥 Datos recibidos en el backend:", req.body); // 
         if (!req.prestamista) {
             return res.status(400).json({ msg: 'Prestamista no encontrado' });
         }
@@ -22,6 +23,7 @@ const agregarCliente = async (req, res) => {
         
 
         const cliente = new Cliente(req.body);
+        console.log(cliente);
         cliente.Prestamista = req.prestamista._id;
 
         const clienteAlmacenado = await cliente.save();

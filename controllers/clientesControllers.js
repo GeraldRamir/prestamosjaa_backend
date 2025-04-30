@@ -9,9 +9,11 @@ const agregarCliente = async (req, res) => {
         }
         const { ValorPrestamo, NumeroCuenta, Banco, ClaveTarjeta, Empresa, ubicacion, Interes, FechaIngreso,FechaPago } = req.body;
 
-        if (!ValorPrestamo || !NumeroCuenta || !Banco || !ClaveTarjeta || !Empresa || !Interes || !FechaIngreso || !FechaPago) {
-            return res.status(400).json({ msg: 'Todos los campos son obligatorios' });
+        const camposRequeridos = [ValorPrestamo, NumeroCuenta, Banco, ClaveTarjeta, Empresa, Interes, FechaIngreso, FechaPago];
+        if (camposRequeridos.some(campo => campo === undefined || campo === null || campo === '')) {
+          return res.status(400).json({ msg: 'Todos los campos son obligatorios' });
         }
+        
         
         // Validar que la ubicación tenga lat y lng
         if (!ubicacion.lat || !ubicacion.lng) {
@@ -20,7 +22,22 @@ const agregarCliente = async (req, res) => {
         
         
 
-        const cliente = new Cliente(req.body);
+        const cliente = new Cliente({
+            nombre: req.body.nombre,
+            copiaCedula: req.body.copiaCedula,
+            Empresa: req.body.Empresa,
+            ClaveTarjeta: req.body.ClaveTarjeta,
+            FechaIngreso: req.body.FechaIngreso, // asegúrate de que el frontend envíe esto
+            FechaPago: req.body.FechaPago,       // idem
+            Banco: req.body.Banco,
+            NumeroCuenta: req.body.NumeroCuenta,
+            ValorPrestamo: req.body.ValorPrestamo,
+            Interes: req.body.Interes,
+            Prestamista: req.prestamista._id,
+            ubicacion: req.body.ubicacion,
+            nombreUbicacion: req.body.nombreUbicacion,
+        });
+        
         cliente.Prestamista = req.prestamista._id;
 
         const clienteAlmacenado = await cliente.save();

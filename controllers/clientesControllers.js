@@ -7,9 +7,9 @@ const agregarCliente = async (req, res) => {
         if (!req.prestamista) {
             return res.status(400).json({ msg: 'Prestamista no encontrado' });
         }
-        const { ValorPrestamo, NumeroCuenta, Banco, ClaveTarjeta, Empresa, ubicacion, Interes, apellido, nombreUbicacion } = req.body;
+        const { ValorPrestamo, NumeroCuenta, Banco, ClaveTarjeta, Empresa, ubicacion, Interes, telefono, FechaIngreso, FechaPago, nombreUbicacion } = req.body;
 
-        if (!ValorPrestamo || !NumeroCuenta || !Banco || !ClaveTarjeta || !Empresa || !Interes || !apellido || !ubicacion || !nombreUbicacion) {
+        if (!ValorPrestamo || !NumeroCuenta || !Banco || !ClaveTarjeta || !Empresa || !Interes || !ubicacion || !nombreUbicacion || !FechaIngreso || !FechaPago || !telefono) {
             return res.status(400).json({ msg: 'Todos los campos son obligatorios' });
         }
         

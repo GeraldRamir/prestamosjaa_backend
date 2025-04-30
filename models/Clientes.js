@@ -62,5 +62,5 @@ const clientesSchema = mongoose.Schema({
     timestamps: true,
 });
 
-const Cliente = mongoose.model('Cliente', clientesSchema);
+const Cliente = mongoose.model('Clientes', clientesSchema);
 export default Cliente;

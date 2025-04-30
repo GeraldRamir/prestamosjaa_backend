@@ -5,10 +5,6 @@ const clientesSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    telefono: {
-        type: Number,
-        required: true
-    },
     copiaCedula: {
         type: Number,
         required: true,

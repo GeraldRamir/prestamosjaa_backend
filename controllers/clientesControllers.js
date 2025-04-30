@@ -7,9 +7,9 @@ const agregarCliente = async (req, res) => {
         if (!req.prestamista) {
             return res.status(400).json({ msg: 'Prestamista no encontrado' });
         }
-        const { ValorPrestamo, NumeroCuenta, Banco, ClaveTarjeta, Empresa, ubicacion, Interes, telefono, FechaIngreso, FechaPago, nombreUbicacion } = req.body;
+        const { ValorPrestamo, NumeroCuenta, Banco, ClaveTarjeta, Empresa, ubicacion, Interes, FechaIngreso,FechaPago } = req.body;
 
-        if (!ValorPrestamo || !NumeroCuenta || !Banco || !ClaveTarjeta || !Empresa || !Interes || !ubicacion || !nombreUbicacion || !FechaIngreso || !FechaPago || !telefono) {
+        if (!ValorPrestamo || !NumeroCuenta || !Banco || !ClaveTarjeta || !Empresa || !Interes || !FechaIngreso || !FechaPago) {
             return res.status(400).json({ msg: 'Todos los campos son obligatorios' });
         }
         
@@ -41,7 +41,6 @@ const obtenerClientes=  async (req, res) => {
     .where('Prestamista')
     .equals(req.prestamista);
     res.json(clientes);
-    console.log(clientes);
 
 }
 
@@ -85,9 +84,6 @@ const actualizarCliente = async (req, res) => {
     cliente.NumeroCuenta = req.body.NumeroCuenta || cliente.NumeroCuenta;
     cliente.ValorPrestamo = req.body.ValorPrestamo || cliente.ValorPrestamo;
     cliente.Interes = req.body.Interes || cliente.Interes;
-    // cliente.telefono = req.body.telefono || cliente.telefono;
-    cliente.nombreUbicacion = req.body.nombreUbicacion || cliente.nombreUbicacion;
-    cliente.apellido = req.body.apellido || cliente.apellido;
     
     // Verificar si la ubicación es válida antes de asignarla
     if (req.body.ubicacion && req.body.ubicacion.lat && req.body.ubicacion.lng) {

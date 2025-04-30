@@ -5,10 +5,6 @@ const clientesSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    telefono:{
-        type: Number,
-        required: true
-    },
     copiaCedula: {
         type: Number,
         required: true,
@@ -26,12 +22,12 @@ const clientesSchema = mongoose.Schema({
     FechaIngreso: {
         type: Date,
         required: true,
-        default: Date.now
+        default: Date.now()
     },
     FechaPago: {
         type: Date,
         required: true,
-        default: Date.now
+        default: Date.now()
     },
     Banco:{
         type: String,
@@ -62,5 +58,5 @@ const clientesSchema = mongoose.Schema({
     timestamps: true,
 });
 
-const Cliente = mongoose.model('clientes', clientesSchema);
+const Cliente = mongoose.model('Cliente', clientesSchema);
 export default Cliente;

@@ -33,10 +33,6 @@ const clientesSchema = mongoose.Schema({
         required: true,
         default: Date.now()
     },
-    Banco:{
-        type: String,
-        required: true
-    },
     bank:{
         type: String,
         required: true

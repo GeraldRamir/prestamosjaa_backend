@@ -1,15 +1,14 @@
 import Cliente from "../models/Clientes.js";
 import { crearPagosParaCliente, eliminarPagosPorCliente } from "./pagosController.js";
-import Pago from "../models/Pago.js"; // 🔹 Importar el modelo de pagos
 
 const agregarCliente = async (req, res) => {
     try {
         if (!req.prestamista) {
             return res.status(400).json({ msg: 'Prestamista no encontrado' });
         }
-        const { ValorPrestamo, copiaCedula, NumeroCuenta, ubicacion, Banco, ClaveTarjeta, Empresa, nombreUbicacion, Interes, nombre, FechaIngreso, FechaPago } = req.body;
+        const { ValorPrestamo, copiaCedula, NumeroCuenta, ubicacion, Banco, ClaveTarjeta, Empresa, nombreUbicacion, Interes, nombre } = req.body;
 
-        if (!ValorPrestamo || !NumeroCuenta || !Banco || !ClaveTarjeta || !Empresa || !Interes || !nombre || !FechaIngreso || !FechaPago || !copiaCedula || !nombreUbicacion) {
+        if (!ValorPrestamo || !NumeroCuenta || !Banco || !ClaveTarjeta || !Empresa || !Interes || !nombre || !copiaCedula || !nombreUbicacion) {
             return res.status(400).json({ msg: 'Todos los campos son obligatorios' });
         }
         

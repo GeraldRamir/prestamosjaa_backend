@@ -84,6 +84,7 @@ const actualizarCliente = async (req, res) => {
     cliente.Interes = req.body.Interes || cliente.Interes;
     cliente.telefono = req.body.telefono || cliente.telefono;
     cliente.bank= req.body.bank || cliente.bank;
+    cliente.nombreUbicacion = req.body.nombreUbicacion || cliente.nombreUbicacion;
     
     // Verificar si la ubicación es válida antes de asignarla
     if (req.body.ubicacion && req.body.ubicacion.lat && req.body.ubicacion.lng) {

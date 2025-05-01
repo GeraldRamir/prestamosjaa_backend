@@ -10,6 +10,10 @@ const clientesSchema = mongoose.Schema({
         required: true,
         unique: true
     },
+    telefono:{
+        type: Number,
+        required: true,
+    },
     Empresa: {
         type: String,
         required: true
@@ -19,16 +23,16 @@ const clientesSchema = mongoose.Schema({
         required: true,
         unique:true
     },
-    // FechaIngreso: {
-    //     type: Date,
-    //     required: true,
-    //     default: Date.now()
-    // },
-    // FechaPago: {
-    //     type: Date,
-    //     required: true,
-    //     default: Date.now()
-    // },
+    FechaIngreso: {
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
+    FechaPago: {
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
     Banco:{
         type: String,
         required: true

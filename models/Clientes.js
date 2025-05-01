@@ -37,6 +37,10 @@ const clientesSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    bank:{
+        type: String,
+        required: true
+    },
     NumeroCuenta:{
         type: Number,
         required: true

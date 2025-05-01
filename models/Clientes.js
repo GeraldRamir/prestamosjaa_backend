@@ -29,8 +29,8 @@ const clientesSchema = mongoose.Schema({
         required: true,
         default: Date.now()
     },
-    telefono:{
-        type: Number,
+    Banco:{
+        type: String,
         required: true
     },
     NumeroCuenta:{

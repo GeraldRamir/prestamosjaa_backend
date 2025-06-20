@@ -48,7 +48,6 @@ const crearPagosParaCliente = async (clienteId) => {
         intereses: Interes,
         total: valorPrestamo, // El total inicial puede ser igual al valor del préstamo
         atrasos: 0,
-        descuento: 0, // Inicializamos el descuento en 0
       };
 
       pagosExistentes = await Pago.create({
@@ -106,7 +105,7 @@ const obtenerPagosPorCliente = async (req, res) => {
 // Agregar un nuevo pago al array del cliente
 // Agregar un nuevo pago al array del cliente
 const agregarPago = async (req, res) => {
-  const { clienteId, quincena, capital, avance, abono, intereses, total, atrasos, descuento } = req.body;
+  const { clienteId, quincena, capital, avance, abono, intereses, total, atrasos } = req.body;
 
   try {
     let pagoCliente = await Pago.findOne({ cliente: clienteId });
@@ -115,13 +114,13 @@ const agregarPago = async (req, res) => {
     if (!pagoCliente) {
       pagoCliente = new Pago({
         cliente: clienteId,
-        pagos: [{ quincena, capital, avance, abono, intereses, total, atrasos, descuento }],
+        pagos: [{ quincena, capital, avance, abono, intereses, total, atrasos }],
         totales: [], // Inicializamos el array de totales vacío
         totalGeneral: 0, // Inicializamos el totalGeneral en cero
       });
     } else {
       // Si ya existe, agregamos el nuevo pago
-      pagoCliente.pagos.push({ quincena, capital, avance, abono, intereses, total, atrasos, descuento });
+      pagoCliente.pagos.push({ quincena, capital, avance, abono, intereses, total, atrasos });
     }
 
     // Recalcular los totales de cada columna (capital, avance, abono, intereses, atrasos)
@@ -157,7 +156,7 @@ const agregarPago = async (req, res) => {
 // Editar un pago dentro del array
 const actualizarPago = async (req, res) => {
   const { clienteId, pagoId } = req.params;
-  const { quincena, capital, avance, abono, intereses, total, atrasos, descuento } = req.body;
+  const { quincena, capital, avance, abono, intereses, total, atrasos } = req.body;
 
   try {
     // Buscar y actualizar el pago del cliente
@@ -171,8 +170,7 @@ const actualizarPago = async (req, res) => {
           "pagos.$.abono": abono,
           "pagos.$.intereses": intereses,
           "pagos.$.total": total,
-          "pagos.$.atrasos": atrasos,
-          "pagos.$.descuento": descuento
+          "pagos.$.atrasos": atrasos
         }
       },
       { new: true }

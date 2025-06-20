@@ -8,7 +8,6 @@ const pagoSchema = new mongoose.Schema({
   intereses: { type: Number, required: true },
   total: { type: Number, required: true },
   atrasos: { type: Number, required: true, default: 0 },
-  descuento: { type: Number, required: true },
 });
 
 const pagosSchema = new mongoose.Schema(

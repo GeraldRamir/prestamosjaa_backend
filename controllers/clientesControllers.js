@@ -6,9 +6,9 @@ const agregarCliente = async (req, res) => {
         if (!req.prestamista) {
             return res.status(400).json({ msg: 'Prestamista no encontrado' });
         }
-        const { ValorPrestamo, copiaCedula, NumeroCuenta, ubicacion, ClaveTarjeta, Empresa, Interes, nombre, FechaIngreso, FechaPago, telefono,bank } = req.body;
+        const { ValorPrestamo, copiaCedula, NumeroCuenta, ubicacion, Clavedetarjeta, Empresa, Interes, nombre, FechaIngreso, FechaPago, telefono,bank } = req.body;
 
-        if (!ValorPrestamo || !NumeroCuenta|| !ClaveTarjeta || !Empresa || !Interes || !nombre || !copiaCedula || !FechaIngreso || !FechaPago || !telefono || !bank) {
+        if (!ValorPrestamo || !NumeroCuenta|| !Clavedetarjeta || !Empresa || !Interes || !nombre || !copiaCedula || !FechaIngreso || !FechaPago || !telefono || !bank) {
             return res.status(400).json({ msg: 'Todos los campos son obligatorios' });
         }
         
@@ -76,7 +76,7 @@ const actualizarCliente = async (req, res) => {
     cliente.nombre = req.body.nombre || cliente.nombre;
     cliente.copiaCedula = req.body.copiaCedula || cliente.copiaCedula;
     cliente.Empresa = req.body.Empresa || cliente.Empresa;
-    cliente.ClaveTarjeta = req.body.ClaveTarjeta || cliente.ClaveTarjeta;
+    cliente.Clavedetarjeta = req.body.Clavedetarjeta || cliente.Clavedetarjeta;
     cliente.FechaIngreso = req.body.FechaIngreso || cliente.FechaIngreso;
     cliente.FechaPago = req.body.FechaPago || cliente.FechaPago;
     cliente.NumeroCuenta = req.body.NumeroCuenta || cliente.NumeroCuenta;

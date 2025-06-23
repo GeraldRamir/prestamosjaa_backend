@@ -18,15 +18,16 @@ const clientesSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    ClaveTarjeta:{
-        type: Number,
-        required: true,
-        unique:true
-    },
     FechaIngreso: {
         type: Date,
         required: true,
         default: Date.now()
+    },
+    Clavedetarjeta:{
+        type: Number,
+        required: true,
+        unique: false
+
     },
     FechaPago: {
         type: Date,

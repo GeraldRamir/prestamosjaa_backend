@@ -1,5 +1,6 @@
 import Pago from "../models/Pago.js";
 import Cliente from "../models/Clientes.js";
+import { calcularInteresYTotalFila } from "../helpers/calculoPrestamo.js";
 
 // Función para calcular los totales de cada columna
 const calcularTotales = (pagos) => {
@@ -37,16 +38,23 @@ const crearPagosParaCliente = async (clienteId) => {
 
     if (!pagosExistentes) {
       const valorPrestamo = cliente.ValorPrestamo;
-      const Interes= cliente.Interes;
       const fechaInicio = new Date();
+
+      const { intereses, total } = calcularInteresYTotalFila({
+        capital: valorPrestamo,
+        avance: 0,
+        abono: 0,
+        atrasos: 0,
+        tasaInteresPercent: cliente.Interes,
+      });
 
       const pagoInicial = {
         quincena: fechaInicio,
         capital: valorPrestamo,
         avance: 0,
         abono: 0,
-        intereses: Interes,
-        total: valorPrestamo, // El total inicial puede ser igual al valor del préstamo
+        intereses,
+        total,
         atrasos: 0,
       };
 
@@ -66,7 +74,7 @@ const crearPagosParaCliente = async (clienteId) => {
         totales.intereses,
         totales.atrasos,
       ];
-      pagosExistentes.totalGeneral = totales.capital + totales.avance + totales.abono + totales.intereses + totales.atrasos;
+      pagosExistentes.totalGeneral = totales.total;
 
       // Guardamos el documento con los totales calculados
       await pagosExistentes.save();
@@ -105,9 +113,23 @@ const obtenerPagosPorCliente = async (req, res) => {
 // Agregar un nuevo pago al array del cliente
 // Agregar un nuevo pago al array del cliente
 const agregarPago = async (req, res) => {
-  const { clienteId, quincena, capital, avance, abono, intereses, total, atrasos } = req.body;
+  const clienteId = req.body.clienteId || req.params.clienteId;
+  const { quincena, capital, avance, abono, atrasos } = req.body;
 
   try {
+    const cliente = await Cliente.findById(clienteId);
+    if (!cliente) {
+      return res.status(404).json({ msg: "Cliente no encontrado" });
+    }
+
+    const { intereses, total } = calcularInteresYTotalFila({
+      capital,
+      avance,
+      abono,
+      atrasos,
+      tasaInteresPercent: cliente.Interes,
+    });
+
     let pagoCliente = await Pago.findOne({ cliente: clienteId });
 
     // Si no existe el pago para el cliente, creamos uno nuevo
@@ -135,8 +157,7 @@ const agregarPago = async (req, res) => {
       totales.atrasos
     ];
 
-    // Calcular y asignar el `totalGeneral` (suma de todos los totales)
-    pagoCliente.totalGeneral = totales.capital + totales.avance + totales.abono + totales.intereses + totales.atrasos;
+    pagoCliente.totalGeneral = totales.total;
 
     // Guardar los cambios en la base de datos
     await pagoCliente.save();
@@ -156,29 +177,40 @@ const agregarPago = async (req, res) => {
 // Editar un pago dentro del array
 const actualizarPago = async (req, res) => {
   const { clienteId, pagoId } = req.params;
-  const { quincena, capital, avance, abono, intereses, total, atrasos } = req.body;
+  const { quincena, capital, avance, abono, atrasos } = req.body;
 
   try {
-    // Buscar y actualizar el pago del cliente
-    const pagoCliente = await Pago.findOneAndUpdate(
-      { cliente: clienteId, "pagos._id": pagoId },
-      { 
-        $set: { 
-          "pagos.$.quincena": quincena,
-          "pagos.$.capital": capital,
-          "pagos.$.avance": avance,
-          "pagos.$.abono": abono,
-          "pagos.$.intereses": intereses,
-          "pagos.$.total": total,
-          "pagos.$.atrasos": atrasos
-        }
-      },
-      { new: true }
-    );
+    const cliente = await Cliente.findById(clienteId);
+    if (!cliente) {
+      return res.status(404).json({ msg: "Cliente no encontrado" });
+    }
 
-    if (!pagoCliente) {
+    const pagoDoc = await Pago.findOne({ cliente: clienteId, "pagos._id": pagoId });
+    if (!pagoDoc) {
       return res.status(404).json({ msg: "Pago no encontrado." });
     }
+
+    const subpago = pagoDoc.pagos.id(pagoId);
+    if (!subpago) {
+      return res.status(404).json({ msg: "Pago no encontrado." });
+    }
+
+    subpago.quincena = quincena;
+    subpago.capital = capital;
+    subpago.avance = avance;
+    subpago.abono = abono;
+    subpago.atrasos = atrasos;
+    const calculados = calcularInteresYTotalFila({
+      capital: subpago.capital,
+      avance: subpago.avance,
+      abono: subpago.abono,
+      atrasos: subpago.atrasos,
+      tasaInteresPercent: cliente.Interes,
+    });
+    subpago.intereses = calculados.intereses;
+    subpago.total = calculados.total;
+
+    const pagoCliente = await pagoDoc.save();
 
     // Recalcular los totales de cada columna
     const totales = calcularTotales(pagoCliente.pagos);
